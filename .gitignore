@@ -56,7 +56,7 @@ config.status
 ltmain.sh
 
 # Test problem
-#mps/*
+mps/*.mps
 
 # Executable
 PCx
@@ -81,6 +81,3 @@ Ng-Peyton/Files_Fernando/Ng-Peyton.vcproj
 *.out
 *.app
 
-# 
-*.sublime-project
-*.sublime-workspace
