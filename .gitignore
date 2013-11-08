@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-
 # Vim's temporary files.
 *.swp
 
@@ -31,7 +29,6 @@ mps-test/
 *.a
 
 # C/C++ Shared objects (inc. Windows DLLs)
-=======
 # Object files
 *.o
 *.ko
@@ -41,13 +38,11 @@ mps-test/
 *.a
 
 # Shared objects (inc. Windows DLLs)
->>>>>>> def3f58dc3ccf66ee7d3f20c690ed5025af12958
 *.dll
 *.so
 *.so.*
 *.dylib
 
-<<<<<<< HEAD
 # C/C++ Executables
 *.exe
 *.out
@@ -80,9 +75,12 @@ F2C/Files_Fernando/f2c.icproj
 Ng-Peyton/Files_Fernando/NG-Peyton_command_line.txt
 Ng-Peyton/Files_Fernando/Ng-Peyton.icproj
 Ng-Peyton/Files_Fernando/Ng-Peyton.vcproj
-=======
+
 # Executables
 *.exe
 *.out
 *.app
->>>>>>> def3f58dc3ccf66ee7d3f20c690ed5025af12958
+
+# 
+*.sublime-project
+*.sublime-workspace
