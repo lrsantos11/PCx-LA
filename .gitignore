@@ -56,7 +56,7 @@ config.status
 ltmain.sh
 
 # Test problem
-mps/*
+#mps/*
 
 # Executable
 PCx
