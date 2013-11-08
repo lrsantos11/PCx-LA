@@ -676,7 +676,8 @@ PCx(LP, Solution, Inputs)
 }
 
 /*****************************************************************/
-/* Mehrotra's heuristic to compute the starting point            */
+/* Mehrotra's heuristic to compute the starting point changed to */
+/*              compute new Initial Point centered               */
 /*****************************************************************/
 
 int             
@@ -691,7 +692,7 @@ InitialPoint(A, Asparse, Adense, Factor, b, c,
      double         *FactorTime, *SolveTime;
 {
    int             i, irow, status, Factorize(), EnhancedSolve(), 
-                   SparseSaxpyM(), SparseSaxpyTM();
+                   SparseSaxpyM(), SparseSaxpyTM(), ComputeWandLdense();
    void            StripScale();
    int             NumRows, NumCols, NumBounds, *iupbound;
    double          one = 1.0, *tempR1, *tempR2, *tempC, *scaleSparse, 
@@ -700,6 +701,12 @@ InitialPoint(A, Asparse, Adense, Factor, b, c,
 
    double          BeginUserTime, EndUserTime, BeginSysTime, EndSysTime;
    double          time1;
+
+   /* Added by LRS: variables for norms*/
+
+   double 		  TwoNorm2(); // Calling TwoNorm2()
+
+   double 		  norm_x, norm_s, norm_w, norm_r; 	
 
 
    NumRows = Current->NumRows;
@@ -854,7 +861,25 @@ InitialPoint(A, Asparse, Adense, Factor, b, c,
 	 irow = iupbound[i] - 1;
 	 w[i] = upbound[i] - x[irow];
       }
+
+	/* Added by LRS:  norm of x, s, r  and w */
+
+     printf("\n NORMS OF INITAL POINT VECTORS CALCULATED BY NORMAL EQUATIONS\n"); 
+
+    norm_x = sqrt(TwoNorm2(x,&NumCols));
+    printf("%11.4e\n",norm_x);
+
+    norm_w = sqrt(TwoNorm2(w,&NumBounds));
+    printf("%11.4e\n",norm_w);
+
+	norm_s = sqrt(TwoNorm2(s,&NumCols));
+	printf("%11.4e\n",norm_s);
+
+    norm_r = sqrt(TwoNorm2(r,&NumBounds));
+    printf("%11.4e\n",norm_r);   
    
+
+
    /* compute delta_primal and delta_dual */
    
    delta_primal = delta_dual = 1.0e30;	/* initialize with large number */
@@ -915,6 +940,22 @@ InitialPoint(A, Asparse, Adense, Factor, b, c,
 	 r[i] += delta_dual;
 	 w[i] += delta_primal;
       }
+	
+	/* Added by LRS:  norm of x, s, r  and w */
+
+     printf("\n NORMS OF INITAL POINT VECTORS SHIFTED\n"); 
+
+    norm_x = sqrt(TwoNorm2(x,&NumCols));
+    printf("%11.4e\n",norm_x);
+
+    norm_w = sqrt(TwoNorm2(w,&NumBounds));
+    printf("%11.4e\n",norm_w);
+
+	norm_s = sqrt(TwoNorm2(s,&NumCols));
+	printf("%11.4e\n",norm_s);
+
+    norm_r = sqrt(TwoNorm2(r,&NumBounds));
+    printf("%11.4e\n",norm_r);      
    
    Free((char *) tempR1);
    Free((char *) tempR2);
