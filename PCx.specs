@@ -1,5 +1,4 @@
 presolve yes
-solution no
+solution yes
 history 
-orderalg 1
 inputdirectory ./mps

@@ -1,5 +1,4 @@
 presolve yes
 solution no
 history 
-orderalg 2
 inputdirectory ./mps

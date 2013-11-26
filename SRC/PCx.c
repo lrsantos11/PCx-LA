@@ -353,12 +353,12 @@ PCx(LP, Solution, Inputs)
     /*******************************************************************/
 
     /* first, check for OPTIMAL termination */
-
+	 printf("\n Gap Criteria %11.4e \n", fabs(primal_objective - dual_objective) / 
+	     (1.0 + (fabs(primal_objective))));
 	 if (PriInf < PriFeasTol && DualInf < DualFeasTol &&
-	     /*        (fabs(primal_objective - dual_objective) / 
-		      (1.0 + (fabs(primal_objective))) < OptTol)) { */
-	     mu / (1.0 + (fabs(primal_objective))) < OptTol) 
-	    {
+	     (fabs(primal_objective - dual_objective) / 
+	     (1.0 + (fabs(primal_objective))) < OptTol)) { 
+/*	     mu / (1.0 + (fabs(primal_objective))) < OptTol) {*/
 	       Solution->Status = OPTIMAL_SOL;
 	       if (Inputs->ReportingLevel > 0)
 		 printf("\n--termination with OPTIMAL status\n");
@@ -391,8 +391,12 @@ PCx(LP, Solution, Inputs)
 		 {
 		   printf("\n--termination with UNKNOWN status");
 		   printf(" (due to large residual/mu ratio)\n");
-		   /* printf("(current rmu) / (initial rmu) = %e\n", 
-		      rmu_ratio / rmu_ratio0); */
+		    printf("(current rmu) / (initial rmu) = %e\n", 
+		      rmu_ratio / rmu_ratio0); 
+		    printf("PriInf  = %e, PriFeasTol = %e\n", 
+		      PriInf, PriFeasTol);
+		     printf("DualInf = %e,  DualFeasTol = %e\n", 
+		      DualInf, DualFeasTol); 
 		 }
 
 	       algorithm_loop_flag = OFF;
@@ -704,10 +708,8 @@ InitialPoint(A, Asparse, Adense, Factor, b, c,
 
    /* Added by LRS: variables for norms*/
 
-   double 		  TwoNorm2(); // Calling TwoNorm2()
-
-   double 		  norm_x, norm_s, norm_w, norm_r; 	
-
+   void			  PrintNorm2();	
+   
 
    NumRows = Current->NumRows;
    NumCols = Current->NumCols;
@@ -866,18 +868,19 @@ InitialPoint(A, Asparse, Adense, Factor, b, c,
 
      printf("\n NORMS OF INITAL POINT VECTORS CALCULATED BY NORMAL EQUATIONS\n"); 
 
-    norm_x = sqrt(TwoNorm2(x,&NumCols));
-    printf("%11.4e\n",norm_x);
+    
+    printf("norm(x) = ");
+    PrintNorm2(x,NumCols);
 
-    norm_w = sqrt(TwoNorm2(w,&NumBounds));
-    printf("%11.4e\n",norm_w);
+    printf("norm(w) = ");
+    PrintNorm2(w,NumBounds);
+    
+    printf("norm(s) = ");
+    PrintNorm2(s,NumCols);
 
-	norm_s = sqrt(TwoNorm2(s,&NumCols));
-	printf("%11.4e\n",norm_s);
-
-    norm_r = sqrt(TwoNorm2(r,&NumBounds));
-    printf("%11.4e\n",norm_r);   
-   
+    printf("norm(r) = ");
+    PrintNorm2(r,NumBounds);
+    
 
 
    /* compute delta_primal and delta_dual */
@@ -935,6 +938,8 @@ InitialPoint(A, Asparse, Adense, Factor, b, c,
 	 s[i] += delta_dual;
       }
    
+   /* update r and w */
+
    for (i = 0; i < NumBounds; i++) 
       {
 	 r[i] += delta_dual;
@@ -943,22 +948,31 @@ InitialPoint(A, Asparse, Adense, Factor, b, c,
 	
 	/* Added by LRS:  norm of x, s, r  and w */
 
-     printf("\n NORMS OF INITAL POINT VECTORS SHIFTED\n"); 
+    printf("\n NORMS OF INITAL POINT VECTORS SHIFTED\n"); 
 
-    norm_x = sqrt(TwoNorm2(x,&NumCols));
-    printf("%11.4e\n",norm_x);
 
-    norm_w = sqrt(TwoNorm2(w,&NumBounds));
-    printf("%11.4e\n",norm_w);
+    printf("norm(x) = ");
+    PrintNorm2(x,NumCols);
 
-	norm_s = sqrt(TwoNorm2(s,&NumCols));
-	printf("%11.4e\n",norm_s);
+    printf("norm(w) = ");
+    PrintNorm2(w,NumBounds);
+    
+    printf("norm(s) = ");
+    PrintNorm2(s,NumCols);
 
-    norm_r = sqrt(TwoNorm2(r,&NumBounds));
-    printf("%11.4e\n",norm_r);      
+    printf("norm(r) = ");
+    PrintNorm2(r,NumBounds);
+    
    
    Free((char *) tempR1);
    Free((char *) tempR2);
    Free((char *) tempC);
    return 0;
+}
+
+
+void PrintNorm2(int *x, int n){
+	double norm, TwoNorm2();
+	norm = sqrt(TwoNorm2(x,&n));
+    printf("%11.4e\n",norm);   
 }

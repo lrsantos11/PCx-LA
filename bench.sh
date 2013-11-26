@@ -1,6 +1,6 @@
 #!/bin/bash
 stdlib="netlib netlibqap kenlib meslib pdslib raillib fctplib"
-stdspecs="mmd rcm"
+stdspecs="mmd rcm PCx"
 while getopts l:s:h name
 do
     case $name in
@@ -28,6 +28,7 @@ do
             echo ''
             echo '    * mmd'
             echo '    * rcm'
+            echo '    * PCx'            
             echo ''
             echo 'If any argument is given it will run for all the library'
             echo 'and specifications avaliable.'

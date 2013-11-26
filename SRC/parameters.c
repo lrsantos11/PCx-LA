@@ -59,7 +59,7 @@ void	     FreeParameters(Parameters *Inputs);
 
 int          CheckParameters(Parameters *ptr);
 
-int          ParseSpecsFile(Parameters *parameters, char *infile);
+int          ParseSpecsFile(Parameters *parameters, char *infile, char *infile);
 */
 /***************************************************************************/
 
@@ -88,7 +88,7 @@ NewParameters()
    ptr = (Parameters *) Malloc(sizeof(Parameters), "NewParameters");
    
    ptr->IterationLimit = 100;
-   ptr->OptTol         = 1.0e-10;
+   ptr->OptTol         = 1.0e-8;
    ptr->PriFeasTol     = 1.0e-8;
    ptr->DualFeasTol    = 1.0e-8;
    ptr->AlphaScale     = 0.9;
@@ -216,9 +216,10 @@ CheckParameters(ptr)
 /***************************************************************************/
 
 int 
-ParseSpecsFile(parameters, infile)
+ParseSpecsFile(parameters, infile, sinfile)
      Parameters     *parameters;
      char           *infile;
+     char 			*sinfile;
 {
    int             match, key;
    char            line[200], rootfilename[200], filename[200];
@@ -270,6 +271,11 @@ ParseSpecsFile(parameters, infile)
 	 strcat(filename, ".specs");
 	 fp = fopen(filename, "r");
       }
+  	if (fp == NULL && sinfile[0] != '\0')
+      {
+         strcpy(filename, sinfile);
+         fp = fopen(filename, "r");
+      }      
    if (fp == NULL) 
       {
 	 strcpy(filename, "spc");

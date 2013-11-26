@@ -15,13 +15,21 @@
 
 typedef int errno_t;
 
-char    infile[200]; // Fernando
+ char    infile[200]; // Fernando
+ char    outfile[200]; // Rafael
+ char    sinfile[200]; // Rafael
+ char    P_name[100]; // Rafael inserted
 
 #ifndef _PCX_Usual_
 extern char probname[_maxsize_]; // Fernando
 extern FILE *csvf; // Fernando
-
 #endif
+
+void usage(char *argv[]) {
+  printf("Usage:\n");
+  printf("\t%s mpsfile\n", argv[0]);
+  printf("\t%s -s specification_file mpsfile\n", argv[0]);
+}
 
 extern double UserTime, OldSysTime, OldUserTime;
 
@@ -30,7 +38,7 @@ main(argc, argv)
      char           *argv[];
 {
    
-   FILE           *fp, *outfile, *OpenInputFile();
+   FILE           *fp, /* *outfile, */ *OpenInputFile();
    int             Preprocess(), Postprocess(), passes, PCx();
    int             CheckParameters();
    LPtype         *LP, *ReducedLP, *Convert_MPS_LP();
@@ -46,8 +54,12 @@ main(argc, argv)
    double          UserTime, OldSysTime, OldUserTime;
    errno_t err;
    
-   //extern        char            infile[200]; // Fernando (commented out)
-   
+extern        char            infile[200]; // Rafael inserted
+extern        char            sinfile[200]; // Rafael inserted
+extern        char            outfile[200]; // Rafael inserted
+  
+
+
   /********************************************************************
    *                                                                  *
    * Problems in the "LPtype" data structure have the following form: *
@@ -79,15 +91,34 @@ main(argc, argv)
 
    /* SetFPTrap(32); */
    
-   if (argc != 2) 
-      {
-	 printf("Usage:\n\t%s mpsfile\n", argv[0]);
-	 exit(INVOCATION_ERROR);
-      }
+   if (argc < 2){
+      usage(argv);
+      exit(INVOCATION_ERROR);
+   }
+
    /* Create the parameter data structure, insert the parameter values into
     * it, and check their validity.  */
    
-   strcpy(infile, argv[1]);
+   if (argc == 2) {
+     strcpy(infile, argv[1]);
+     strcpy(outfile, argv[1]);
+     sinfile[0] = '\0';
+   }
+   else {
+     if (argc == 4)
+       if (strcmp("-s", argv[1]) == 0) {
+         strcpy(sinfile, argv[2]);
+         strcpy(infile, argv[3]);
+         strcpy(outfile, argv[3]);
+       }
+     else {
+       usage(argv);
+       exit(INVOCATION_ERROR);
+     }
+   }
+
+
+  // strcpy(infile, argv[1]);
 #ifndef _PCX_Usual_
    strcpy(probname, argv[1]);
    err = fopen_s(&csvf, "allmps.csv", "a");
@@ -98,7 +129,7 @@ main(argc, argv)
    Inputs = NewParameters();
    
    /* read modified parameters (if any) from specs file */
-   ParseSpecsFile(Inputs, infile);
+   ParseSpecsFile(Inputs, infile, sinfile);
    
    /* check for errors */
    if (CheckParameters(Inputs)) 

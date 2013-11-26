@@ -58,6 +58,8 @@ doc::
 clean::
 	rm -f PCx
 	rm -f *.log
+	rm -f mps/*.log
+	rm -f mps/*.out	
 	rm -f Ng-Peyton/*.[ao]
 	rm -f SRC/*.[ao]
 	rm -f mex/*.mex*
