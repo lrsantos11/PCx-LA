@@ -356,9 +356,9 @@ PCx(LP, Solution, Inputs)
 	 printf("\n Gap Criteria %11.4e \n", fabs(primal_objective - dual_objective) / 
 	     (1.0 + (fabs(primal_objective))));
 	 if (PriInf < PriFeasTol && DualInf < DualFeasTol &&
-	     (fabs(primal_objective - dual_objective) / 
-	     (1.0 + (fabs(primal_objective))) < OptTol)) { 
-/*	     mu / (1.0 + (fabs(primal_objective))) < OptTol) {*/
+	     // (fabs(primal_objective - dual_objective) / 
+	     // (1.0 + (fabs(primal_objective))) < OptTol)) { 
+	     mu / (1.0 + (fabs(primal_objective))) < OptTol) {
 	       Solution->Status = OPTIMAL_SOL;
 	       if (Inputs->ReportingLevel > 0)
 		 printf("\n--termination with OPTIMAL status\n");

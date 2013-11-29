@@ -220,10 +220,11 @@ def bench(S, p, o, mf, s, g, t, k):
         else:
             info.add_status(retcod)
         of.write(info.csv())
-        # Remove log and stdout
+        # Remove log and stdout and .out
         if not k:
             subprocess.call(["rm", "-f", f.replace(".mps", ".log")])
             subprocess.call(["rm", "-f", f.replace(".mps", ".stdout")])
+            subprocess.call(["rm", "-f", f.replace(".mps", ".out")])
     of.close()
 
 def check_spc_file(f2check, p):
