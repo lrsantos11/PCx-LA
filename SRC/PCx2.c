@@ -30,6 +30,9 @@ int ComputeObjInf(MMTtype *A, double *b, double *c, double *upbound,
 
 int RecomputeDualVariables(LPtype *LP, solution *Solution);
 
+int RecomputeResiduals(LPtype *LP, solution *Solution);
+
+
 int Trivial_No_Rows(LPtype *LP, solution *Solution);
 
 
@@ -195,6 +198,7 @@ RecomputeDualVariables(LP, Solution)
    
    for (col = 0; col < NumCols; col++)
       DualLower[col] = LP->c[col] - DualLower[col];
+
    for (col = 0; col < NumCols; col++) {
       if (VarType[col] == NORMAL) 
 	 {
@@ -219,6 +223,68 @@ RecomputeDualVariables(LP, Solution)
   }
   return 0;
 }
+
+
+int
+RecomputeResiduals(LP, Solution)
+     LPtype         *LP;
+     solution       *Solution;
+{
+  int             col, NumCols, *VarType, SparseSaxpyT();
+  double         *DualLower, *DualUpper;
+   /* Transfer to local pointers                                      */
+   
+  NumCols = LP->Cols;
+  VarType = LP->VarType;
+  DualUpper = NewDouble(NumCols, "DualUpper");
+  DualLower = NewDouble(NumCols, "DualLower");
+ 
+   
+  /* Find c - A^T pi, store in DualLower in local var                         */
+   
+  for (col = 0; col < NumCols; col++)
+    DualLower[col] = 0.0;
+
+
+  SparseSaxpyT(LP->A, Solution->pi, DualLower);
+
+  for (col = 0; col < NumCols; col++)
+    DualLower[col] = LP->c[col] - DualLower[col];
+ 
+   /* By checking VarType and the sign of (c - A^T pi), figure out *
+    * whether it's the upper-bound or lower-bound dual variable that *
+    * needs to be set to a positive value */
+
+  for (col = 0; col < NumCols; col++) 
+  {
+    if (VarType[col] == NORMAL) 
+    {
+      if (DualLower[col] < 0.0) 
+         DualLower[col] = 0.0;
+    } 
+    else if (VarType[col] == UPPER) 
+    {
+      if (DualLower[col] >= 0.0)
+         DualUpper[col] = 0.0;
+      else if (DualLower[col] < 0.0) 
+      {
+        DualUpper[col] = -DualLower[col];
+        DualLower[col] = 0.0;
+      }
+    }
+    else if (VarType[col] == FREE) 
+      DualLower[col] = 0.0;
+    else 
+      printf(" What are we doing here in PCx? \n");
+  }
+  Free((char *) DualLower);
+  Free((char *) DualUpper);
+  return 0;
+}
+
+
+
+
 
 int 
 Trivial_No_Rows(LP, Solution)

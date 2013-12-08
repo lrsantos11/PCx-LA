@@ -14,6 +14,8 @@
 #include "memory.h"
 #include "f2c.h"
 
+
+
 /********************************************************************
  *                                                                  *
  * PCx() solves linear programming problems by using Mehrotra's     *
@@ -358,14 +360,17 @@ PCx(LP, Solution, Inputs)
 	 if (PriInf < PriFeasTol && DualInf < DualFeasTol &&
 	     // (fabs(primal_objective - dual_objective) / 
 	     // (1.0 + (fabs(primal_objective))) < OptTol)) { 
-	     mu / (1.0 + (fabs(primal_objective))) < OptTol) {
+	     mu / (1.0 + (fabs(primal_objective))) < OptTol) 
+	 {
 	       Solution->Status = OPTIMAL_SOL;
 	       if (Inputs->ReportingLevel > 0)
 		 printf("\n--termination with OPTIMAL status\n");
 	       
 	       algorithm_loop_flag = OFF;
 	       break;
-	    }
+	 }
+
+	 
 	 
     /* If we are much bigger than best phi so far, declare INFEASIBLE */
 
