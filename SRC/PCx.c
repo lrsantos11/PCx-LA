@@ -107,6 +107,12 @@ PCx(LP, Solution, Inputs)
    double          UserTime2, SysTime2, OldUserTime2, OldSysTime2;
    int             MaxCorrections, NumCorrections=0, MaxGondzioCorrections();
 
+   /* Added by LRS: norms of variables*/
+
+   void			  PrintNorm2();	
+   
+  /*End of Additoin by LRS*/
+
    int tamanho1, tamanho2;
    tamanho1 = sizeof(int);
    tamanho2 = sizeof(integer);
@@ -359,13 +365,33 @@ PCx(LP, Solution, Inputs)
 	     (1.0 + (fabs(primal_objective))));
 	 if (PriInf < PriFeasTol && DualInf < DualFeasTol &&
 	     // (fabs(primal_objective - dual_objective) / 
-	     // (1.0 + (fabs(primal_objective))) < OptTol)) { 
+	     // (1.0 + (fabs(primal_objective))) < OptTol)) 
+	 	 // { 
 	     mu / (1.0 + (fabs(primal_objective))) < OptTol) 
 	 {
 	       Solution->Status = OPTIMAL_SOL;
 	       if (Inputs->ReportingLevel > 0)
 		 printf("\n--termination with OPTIMAL status\n");
 	       
+	       	/* Added by LRS:  norm of x, s, r  and w */
+
+    		 printf("\n NORMS OF OPTIMAL VECTORS \n"); 
+
+    
+    		printf("norm2(x*) = ");
+    		PrintNorm2(Current->x,NumCols);
+
+    		printf("norm2(w*) = ");
+    		PrintNorm2(Current->w,NumBounds);
+    
+    		printf("norm2(s*) = ");
+    		PrintNorm2(Current->s,NumCols);
+
+    		printf("norm2(r*) = ");
+    		PrintNorm2(Current->r,NumBounds);
+    /*End of Additoin by LRS*/
+
+
 	       algorithm_loop_flag = OFF;
 	       break;
 	 }
@@ -711,11 +737,12 @@ InitialPoint(A, Asparse, Adense, Factor, b, c,
    double          BeginUserTime, EndUserTime, BeginSysTime, EndSysTime;
    double          time1;
 
-   /* Added by LRS: variables for norms*/
+   /* Added by LRS: norms of variables*/
 
    void			  PrintNorm2();	
    
-
+  /*End of Addition by LRS*/
+   
    NumRows = Current->NumRows;
    NumCols = Current->NumCols;
    NumBounds = Current->NumBounds;
@@ -874,18 +901,18 @@ InitialPoint(A, Asparse, Adense, Factor, b, c,
      printf("\n NORMS OF INITAL POINT VECTORS CALCULATED BY NORMAL EQUATIONS\n"); 
 
     
-    printf("norm(x) = ");
+    printf("norm2(x0) = ");
     PrintNorm2(x,NumCols);
 
-    printf("norm(w) = ");
+    printf("norm2(w0) = ");
     PrintNorm2(w,NumBounds);
     
-    printf("norm(s) = ");
+    printf("norm2(s0) = ");
     PrintNorm2(s,NumCols);
 
-    printf("norm(r) = ");
+    printf("norm2(r0) = ");
     PrintNorm2(r,NumBounds);
-    
+    /*End of Addition by LRS*/
 
 
    /* compute delta_primal and delta_dual */
@@ -956,18 +983,18 @@ InitialPoint(A, Asparse, Adense, Factor, b, c,
     printf("\n NORMS OF INITAL POINT VECTORS SHIFTED\n"); 
 
 
-    printf("norm(x) = ");
+    printf("norm2(x0-shifted) = ");
     PrintNorm2(x,NumCols);
 
-    printf("norm(w) = ");
+    printf("norm2(w0-shifted) = ");
     PrintNorm2(w,NumBounds);
     
-    printf("norm(s) = ");
+    printf("norm2(s0-shifted) = ");
     PrintNorm2(s,NumCols);
 
-    printf("norm(r) = ");
+    printf("norm2(r0-shifted) = ");
     PrintNorm2(r,NumBounds);
-    
+    /*End of Addition by LRS*/
    
    Free((char *) tempR1);
    Free((char *) tempR2);
@@ -976,7 +1003,7 @@ InitialPoint(A, Asparse, Adense, Factor, b, c,
 }
 
 
-void PrintNorm2(int *x, int n){
+void PrintNorm2(double *x, int n){
 	double norm, TwoNorm2();
 	norm = sqrt(TwoNorm2(x,&n));
     printf("%11.4e\n",norm);   

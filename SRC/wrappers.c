@@ -142,4 +142,3 @@ double          TwoNorm2(x, n)
   NormTwoSquareRealDenseVector(x, n, &temp);
   return temp;
 }
-
