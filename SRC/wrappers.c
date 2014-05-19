@@ -12,6 +12,12 @@
 #include "memory.h"
 
 
+ #define max(a,b) \
+   ({ __typeof__ (a) _a = (a); \
+       __typeof__ (b) _b = (b); \
+     _a > _b ? _a : _b; })
+
+
 /* copies a sparseMatrix type into an MMTtype, but doesn't fill in the three
  * index arrays for the transpose structure (this is done in a later routine
  * ) */
@@ -140,5 +146,22 @@ double          TwoNorm2(x, n)
   if (*n <= 0)
     return 0.0;
   NormTwoSquareRealDenseVector(x, n, &temp);
+  return temp;
+}
+
+
+double          MaxNorm(x, n)
+  double         *x;
+  int            *n;
+
+{
+  double          temp;
+  if (*n <= 0)
+    return 0.0;
+  static double  *count;
+  count = x + *n;
+  temp = abs(*x);
+  for ( ; x < count ; )
+      temp = max(temp,abs(*(x+1)));
   return temp;
 }
