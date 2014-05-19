@@ -5,7 +5,7 @@ export WSSMP_LIB =
 export NG_LIB = ../Ng-Peyton/cholesky.a
 export TARGETDIR = .
 
-export CC ?= gcc
+export CC ?= icc
 export CFLAGS ?= -g -O2
 export FC ?= @FC@
 export FCFLAGS ?= @FCFLAGS@
