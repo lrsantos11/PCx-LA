@@ -477,7 +477,13 @@ solution       *MPSsolution(LP, MPS, LPsolution, Changes, Inputs)
 	    row = MPS->A.Row[entry] - 1;
 	    Solution->Activity[row] += MPS->A.Value[entry] * Solution->x[col];
 	 }
-   
+   	
+
+   	/* Added by LRS: copying Solution and Data Norms*/
+
+	Solution->DataMaxNorm = LPsolution->DataMaxNorm;
+    Solution->OptimalSolutionMaxNorm = LPsolution->OptimalSolutionMaxNorm;
+	/* End of Addition  */ 
    /* Free old solution structure */
    FreeSolution(LPsolution);
    

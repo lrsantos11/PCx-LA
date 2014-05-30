@@ -332,6 +332,11 @@ typedef struct solution {
   int ReducedRows;    /* Rows remaining in the matrix after reduction */
   int ReducedColumns; /* Columns remaining in the matrix after reduction */
 
+  /* Added by LRS: Keeping Data and Solutions Norm for Printing.  */
+  double DataMaxNorm;
+  double OptimalSolutionMaxNorm;
+  /*  End by Addition by LRS */
+
 } solution;
 
 typedef struct {

@@ -260,7 +260,7 @@ PCx(LP, Solution, Inputs)
 
   	/*Added by LRS: Print Data Max Norm*/
 
-  	DataMaxNorm(A,LP); 
+  	DataMaxNorm(A,LP,Solution); 
 
   	 /*End of Additin by LRS*/
 
@@ -386,7 +386,7 @@ PCx(LP, Solution, Inputs)
 	       
 	    /* Added by LRS:  norm of x, s, r  and w */
 
-		IterateMaxNorm(Current);
+		//IterateMaxNorm(Current);
 
     	// printf("\n MAX-NORMS OF OPTIMAL VECTORS \n"); 
 
@@ -704,6 +704,13 @@ PCx(LP, Solution, Inputs)
 
    RecomputeDualVariables(LP, Solution);
 
+
+   /* Added by LRS: Add Norm of Optimal Solution */
+
+
+   IterateMaxNorm(Solution, Current);
+
+
   /*******************************************************************/
   /* recycle!                                                        */
   /*******************************************************************/
@@ -720,6 +727,7 @@ PCx(LP, Solution, Inputs)
    Solution->CorrectorTime     = CorrectorTime;
    Solution->FormADATtime      = FormADATtime;
    Solution->InitTime          = InitTime;
+
 
    return 0;			/* normal return */
 }
@@ -1023,6 +1031,8 @@ InitialPoint(A, Asparse, Adense, Factor, b, c,
    return 0;
 }
 
+/* Added by LRS: Compute Data and Iterate Max Norm*/
+
 void PrintNormMax(double *x, int n){
 	double norm, MaxNormVector();
 	norm = MaxNormVector(x,n);
@@ -1030,22 +1040,24 @@ void PrintNormMax(double *x, int n){
 }
 
 
-void DataMaxNorm(MMTtype *A,LPtype *LP){
+void DataMaxNorm(MMTtype *A,LPtype *LP, solution *Solution){
 	double norm, MaxNormVector();
 	norm = MaxNormVector(A->Value,A->Nonzeros);
 	norm = maxLRS(norm, MaxNormVector(LP->b,LP->Rows));
 	norm = maxLRS(norm, MaxNormVector(LP->c,LP->Cols));
 	norm = maxLRS(norm, MaxNormVector(LP->UpBound,LP->NumberBounds));
-	printf("\nMaxNorm of all Data = %11.4e\n",norm);
+	Solution->DataMaxNorm = norm;
+	printf("\nMaxNorm of all Data = %11.8e\n",norm);
 }
 
-void IterateMaxNorm(Iterate *Current){
+void IterateMaxNorm(solution *Solution, Iterate *Current){
 	double norm, MaxNormVector();
 	norm = MaxNormVector(Current->x,Current->NumCols);
 	norm = maxLRS(norm, MaxNormVector(Current->w,Current->NumBounds));
 	norm = maxLRS(norm, MaxNormVector(Current->s,Current->NumCols));
 	norm = maxLRS(norm, MaxNormVector(Current->r,Current->NumBounds));
-	printf("\nMaxNorm of Optimal Solution = %11.4e\n",norm);
+	Solution->OptimalSolutionMaxNorm = norm;
+	printf("\nMaxNorm of Optimal Solution = %11.8e\n",norm);
 }
 
 void PrintNorm2(double *x, int n){
@@ -1053,3 +1065,4 @@ void PrintNorm2(double *x, int n){
 	norm = sqrt(TwoNorm2(x,n));
     printf("%11.4e\n",norm);   
 }
+/* End of Addition*/

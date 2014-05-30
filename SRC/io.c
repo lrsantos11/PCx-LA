@@ -572,6 +572,13 @@ void PrintSolution(MPS, Solution, Inputs, infilename)
 	 
 
 
+	 fprintf(logfile, "\nDATA NORM AND SOLUTION NORM\n");
+	 fprintf(logfile, "=============================\n\n");
+
+	 fprintf(logfile,"\nMaxNorm of all Data = %13.8e\n",Solution->DataMaxNorm);
+	 fprintf(logfile,"\nMaxNorm of Optimal Solution = %13.8e\n",Solution->OptimalSolutionMaxNorm);
+
+	 
 	 fprintf(logfile, "\nTIME SUMMARY\n");
 	 fprintf(logfile, "============\n\n");
 

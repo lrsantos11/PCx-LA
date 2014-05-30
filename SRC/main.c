@@ -205,6 +205,7 @@ extern        char            outfile[200]; // Rafael inserted
 			  Inputs->IterationLimit);
    Solution->ReadTime = readtime;
    Solution->PreprocessTime = pretime;
+
    
    /* solve the problem, keeping track of CPU times.  */
    
@@ -236,6 +237,8 @@ extern        char            outfile[200]; // Rafael inserted
    /* Check the infeasibilities for the point obtained */
    ComputeAndPrintInfeasibilities(Solution, LP);
 
+   
+
    /* Express the solution of LP in terms of the original MPS formulation */
    Solution = MPSsolution(LP, MPS, Solution, Changes, Inputs);
    DeleteChanges(Changes);
@@ -244,7 +247,9 @@ extern        char            outfile[200]; // Rafael inserted
    DeleteLP(LP);
    /* Output the results */
    
+
    PrintSolution(MPS, Solution, Inputs, argv[1]);
+   
 
    FreeSolution(Solution);
    DeleteMPS(MPS);

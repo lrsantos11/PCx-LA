@@ -130,6 +130,10 @@ NewSolution(Rows, Cols, MaxIterations)
    strcpy(Solution->FactorizationCode, "not specified");
    Solution->RestoredIteration = -1;
    Solution->Activity = NULL;
+   /*Added by LRS*/
+   Solution->DataMaxNorm = 0.0;
+   Solution->OptimalSolutionMaxNorm = 0.0;
+   /*End of Addition*/
    return Solution;
 }
 
