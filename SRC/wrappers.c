@@ -12,11 +12,13 @@
 #include "memory.h"
 
 
- #define max(a,b) \
-   ({ __typeof__ (a) _a = (a); \
-       __typeof__ (b) _b = (b); \
-     _a > _b ? _a : _b; })
-
+//  #define max(a,b) \
+//    ({ __typeof__ (a) _a = (a); \
+//        __typeof__ (b) _b = (b); \
+//      _a > _b ? _a : _b; })
+// #define abs(a) \
+//    ({ __typeof__  (a) _a = (a);\
+//      _a > 0 ? _a : - _a; }) 
 
 /* copies a sparseMatrix type into an MMTtype, but doesn't fill in the three
  * index arrays for the transpose structure (this is done in a later routine
@@ -150,18 +152,84 @@ double          TwoNorm2(x, n)
 }
 
 
-double          MaxNorm(x, n)
+double          MaxNormVector(x, n)
   double         *x;
-  int            *n;
+  int            n;
 
 {
   double          temp;
-  if (*n <= 0)
+  if (n <= 0)
     return 0.0;
   static double  *count;
-  count = x + *n;
-  temp = abs(*x);
-  for ( ; x < count ; )
-      temp = max(temp,abs(*(x+1)));
+  count = x + n;
+  temp = absLRS(*x);
+  int teste;
+  teste = 1;
+   for ( ; x < count ; x++ ){
+      temp = maxLRS(temp,absLRS(*(x+1)));
+      }      
   return temp;
 }
+
+/* MaxNormMatrix.c, v1.0, 08/26/91, Sanjay Mehrotra */
+
+/* The function in this file computes a matrix vector product.  The matrix a
+ * is assumed to be stored column-wise and the given vector q is assumed to
+ * be dense. The result is written in vector aq.  The begining and end of
+ * column i in a is stored in ipbra[i] and ipera[i].  The row indices
+ * corresponding to each column in a are stored in ira[]. All the array
+ * information is passed through pointers.  The pointers point to the first
+ * element of the array. The subroutine assumes that the row/column indices
+ * run from 1..m/n. As oppose to 0..m-1, which is the standard C.  All
+ * changes required are done internally in a subroutine.  */
+
+/* WARNING: ROW/COLUMN INDEX ZERO IS NOT ALLOWED. */
+
+//           (A->Value, A->pBeginRow, A->pEndRow, A->Row, x, b,
+//      &(A->NumRows), &(A->NumCols))
+// double             
+// MaxNormMatrix(a_p, ipbra_p, ipera_p, ira_p, q_p, aq_p,
+//             nrow_p, ncol_p)
+//      double         *a_p, *q_p, *aq_p;
+//      int            *ipbra_p, *ipera_p, *ira_p;
+//      int            *ncol_p, *nrow_p;
+// {
+//    int             error_code;
+//    int            *ira_ps;
+//    int             jbeg, jend, irow;
+//    double         *q_ps, *aq_ps, *a_ps;
+//    double          qval, maxnorm;
+   
+//    /* initialize *nrow_p elements of aq */
+   
+//    if (ZeroRealDenseVector(aq_p, nrow_p)) 
+//       {
+//    error_code = 2;
+//    fprintf(stdout, "Error: RealSparseMatrixVectorProduct: Error\n");
+//    fprintf(stdout, " in ZeroRealDenseVector initializing vector.\n");
+//    return error_code;
+//       }
+//    /* indices start from 1 not zero so shift relevant pointers */
+   
+//    aq_ps = aq_p - 1;
+//    a_ps = a_p - 1;
+//    ira_ps = ira_p - 1;
+   
+//    /* now let us start the matrix vector product accumulate one column at a
+//     * time.  */
+//    maxnorm = 0.0;
+//    q_ps = q_p + *ncol_p;
+//    for (; q_p < q_ps; q_p++) 
+//       {
+//    qval = *q_p;
+//    jbeg = *ipbra_p++;
+//    jend = *ipera_p++;
+//       for (; jbeg <= jend; jbeg++) 
+//         {
+//            irow = *(ira_ps + jbeg);
+//            maxnorm = max(maxnorm, abs(*(a_ps + jbeg)));
+//           *(aq_ps + irow) += *(a_ps + jbeg) * qval;
+//         }
+//         }
+//    return maxnorm;
+// }

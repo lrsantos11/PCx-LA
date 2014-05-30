@@ -109,9 +109,9 @@ PCx(LP, Solution, Inputs)
 
    /* Added by LRS: norms of variables*/
 
-   void			  PrintNorm2();	
-   
-  /*End of Additoin by LRS*/
+   void			  DataMaxNorm(), IterateMaxNorm(); //PrintNormMax() ;
+ 
+  /*End of Additin by LRS*/
 
    int tamanho1, tamanho2;
    tamanho1 = sizeof(int);
@@ -256,7 +256,14 @@ PCx(LP, Solution, Inputs)
 		if (Inputs->Diagnostics > 0)
 	 printf("\nMaximum Gondzio corrections = %d\n", MaxCorrections);  
       }
-   
+  	
+
+  	/*Added by LRS: Print Data Max Norm*/
+
+  	DataMaxNorm(A,LP); 
+
+  	 /*End of Additin by LRS*/
+
 
    if (Inputs->ReportingLevel > 1)
      if(Inputs->HOCorrections && MaxCorrections > 0) 
@@ -276,6 +283,10 @@ PCx(LP, Solution, Inputs)
 
    OldUserTime = UserTime;
    OldSysTime = SysTime;
+
+
+       
+
 
    /*******************************************************************/
    /* START OF MAIN LOOP                                              */
@@ -373,22 +384,25 @@ PCx(LP, Solution, Inputs)
 	       if (Inputs->ReportingLevel > 0)
 		 printf("\n--termination with OPTIMAL status\n");
 	       
-	       	/* Added by LRS:  norm of x, s, r  and w */
+	    /* Added by LRS:  norm of x, s, r  and w */
 
-    		 printf("\n NORMS OF OPTIMAL VECTORS \n"); 
+		IterateMaxNorm(Current);
 
-    
-    		printf("norm2(x*) = ");
-    		PrintNorm2(Current->x,NumCols);
+    	// printf("\n MAX-NORMS OF OPTIMAL VECTORS \n"); 
 
-    		printf("norm2(w*) = ");
-    		PrintNorm2(Current->w,NumBounds);
-    
-    		printf("norm2(s*) = ");
-    		PrintNorm2(Current->s,NumCols);
+    		
 
-    		printf("norm2(r*) = ");
-    		PrintNorm2(Current->r,NumBounds);
+    	// printf("MaxNorm(x*) = ");
+    	// PrintNormMax(Current->x,NumCols);
+   		
+   		// printf("MaxNorm(w*) = ");
+   		// PrintNormMax(Current->w,NumBounds);
+   
+   		// printf("MaxNorm(s*) = ");
+   		// PrintNormMax(Current->s,NumCols);
+
+   		// printf("MaxNorm(r*) = ");
+   		// PrintNormMax(Current->r,NumBounds);
     /*End of Additoin by LRS*/
 
 
@@ -739,7 +753,7 @@ InitialPoint(A, Asparse, Adense, Factor, b, c,
 
    /* Added by LRS: norms of variables*/
 
-   void			  PrintNorm2();	
+   // void			  PrintNorm2(), PrintNormMax();	
    
   /*End of Addition by LRS*/
    
@@ -896,22 +910,27 @@ InitialPoint(A, Asparse, Adense, Factor, b, c,
 	 w[i] = upbound[i] - x[irow];
       }
 
+
+
 	/* Added by LRS:  norm of x, s, r  and w */
 
-     printf("\n NORMS OF INITAL POINT VECTORS CALCULATED BY NORMAL EQUATIONS\n"); 
-
     
-    printf("norm2(x0) = ");
-    PrintNorm2(x,NumCols);
 
-    printf("norm2(w0) = ");
-    PrintNorm2(w,NumBounds);
+    // printf("\n NORMS OF INITAL POINT VECTORS CALCULATED BY NORMAL EQUATIONS\n"); 
+     
+    // printf("normMax(x0) = ");
+    // PrintNormMax(x,NumCols);
+
+    // printf("normMax(w0) = ");
+    // PrintNormMax(w,NumBounds);
     
-    printf("norm2(s0) = ");
-    PrintNorm2(s,NumCols);
+    // printf("normMax(s0) = ");
+    // PrintNormMax(s,NumCols);
 
-    printf("norm2(r0) = ");
-    PrintNorm2(r,NumBounds);
+    // printf("normMax(r0) = ");
+    // PrintNormMax(r,NumBounds);
+
+
     /*End of Addition by LRS*/
 
 
@@ -980,20 +999,22 @@ InitialPoint(A, Asparse, Adense, Factor, b, c,
 	
 	/* Added by LRS:  norm of x, s, r  and w */
 
-    printf("\n NORMS OF INITAL POINT VECTORS SHIFTED\n"); 
+    // printf("\n MAX-NORMS OF INITAL POINT VECTORS SHIFTED\n"); 
 
 
-    printf("norm2(x0-shifted) = ");
-    PrintNorm2(x,NumCols);
+    // printf("normMax(x0-shifted) = ");
+    // PrintNormMax(x,NumCols);
 
-    printf("norm2(w0-shifted) = ");
-    PrintNorm2(w,NumBounds);
-    
-    printf("norm2(s0-shifted) = ");
-    PrintNorm2(s,NumCols);
+    // printf("normMax(w0-shifted) = ");
+    // PrintNormMax(w,NumBounds);
+   
+    // printf("normMax(s0-shifted) = ");
+    // PrintNormMax(s,NumCols);
 
-    printf("norm2(r0-shifted) = ");
-    PrintNorm2(r,NumBounds);
+    // printf("normMax(r0-shifted) = ");
+    // PrintNormMax(r,NumBounds);
+
+	
     /*End of Addition by LRS*/
    
    Free((char *) tempR1);
@@ -1002,9 +1023,33 @@ InitialPoint(A, Asparse, Adense, Factor, b, c,
    return 0;
 }
 
+void PrintNormMax(double *x, int n){
+	double norm, MaxNormVector();
+	norm = MaxNormVector(x,n);
+    printf("%11.4e\n",norm);   
+}
+
+
+void DataMaxNorm(MMTtype *A,LPtype *LP){
+	double norm, MaxNormVector();
+	norm = MaxNormVector(A->Value,A->Nonzeros);
+	norm = maxLRS(norm, MaxNormVector(LP->b,LP->Rows));
+	norm = maxLRS(norm, MaxNormVector(LP->c,LP->Cols));
+	norm = maxLRS(norm, MaxNormVector(LP->UpBound,LP->NumberBounds));
+	printf("\nMaxNorm of all Data = %11.4e\n",norm);
+}
+
+void IterateMaxNorm(Iterate *Current){
+	double norm, MaxNormVector();
+	norm = MaxNormVector(Current->x,Current->NumCols);
+	norm = maxLRS(norm, MaxNormVector(Current->w,Current->NumBounds));
+	norm = maxLRS(norm, MaxNormVector(Current->s,Current->NumCols));
+	norm = maxLRS(norm, MaxNormVector(Current->r,Current->NumBounds));
+	printf("\nMaxNorm of Optimal Solution = %11.4e\n",norm);
+}
 
 void PrintNorm2(double *x, int n){
 	double norm, TwoNorm2();
-	norm = sqrt(TwoNorm2(x,&n));
+	norm = sqrt(TwoNorm2(x,n));
     printf("%11.4e\n",norm);   
 }
