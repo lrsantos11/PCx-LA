@@ -153,6 +153,10 @@ def bench(S, p, o, mf, s, g, t, k):
 
     # Run PCx for every file in ``fl``.
     for f in fl:
+    # Fix filename if it didn't ends with '.mps'
+        if not f.endswith('.mps'):
+            f = '{0}.mps'.format(f)
+
         print("Running PCx for {0}. It can take some minutes.".format(f))
         with open(f.replace(".mps", ".stdout"), 'w') as log:
             if S:
@@ -222,20 +226,21 @@ def bench(S, p, o, mf, s, g, t, k):
                             info.add_rel_infeas(m.group('rip'))
                             step += 1
                     elif step == 9:
-                        m = re.match('Time to solve.*: *(?P<cpu>[0-9]*.\.[0-9]*).*', l)
-                        if m:
-                            info.add_cpu(m.group('cpu'))
-                            step += 1
-                    elif step == 10:
                         m = re.match('MaxNorm of all Data = *(?P<normdata>-?[0-9]*.[0-9]*e[+-][0-9]*).*', l)
                         if m:
                             info.add_normdata(m.group('normdata'))
                             step += 1     
-                    elif step == 11:
+                    elif step == 10:
                         m = re.match('MaxNorm of Optimal Solution = *(?P<normsol>-?[0-9]*.[0-9]*e[+-][0-9]*).*', l)
                         if m:
                             info.add_normsol(m.group('normsol'))
-                            step += 1                                                    
+                            step += 1 
+                    elif step == 1:
+                        m = re.match('Time to solve.*: *(?P<cpu>[0-9]*.\.[0-9]*).*', l)
+                        if m:
+                            info.add_cpu(m.group('cpu'))
+                            step += 1
+
         else:
             info.add_status(retcod)
         of.write(info.csv())
@@ -397,5 +402,6 @@ if __name__ == "__main__":
     if check_spc(args.path):
         bench(args.specs, args.path, args.output, args.max, s,
                 f, args.time, args.keep_all_log)
+        print("Check the file bench.out.");
     else:
         print("The specification file must contain 'history yes'.\n")
