@@ -1047,7 +1047,9 @@ void DataMaxNorm(MMTtype *A,LPtype *LP, solution *Solution){
 	norm = maxLRS(norm, MaxNormVector(LP->c,LP->Cols));
 	norm = maxLRS(norm, MaxNormVector(LP->UpBound,LP->NumberBounds));
 	Solution->DataMaxNorm = norm;
+	Solution->NumberBounds = LP->NumberBounds;
 	printf("\nMaxNorm of all Data = %11.8e\n",norm);
+	printf("\nNumber of Bounds = %d\n",Solution->NumberBounds);
 }
 
 void IterateMaxNorm(solution *Solution, Iterate *Current){

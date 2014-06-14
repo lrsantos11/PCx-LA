@@ -2031,6 +2031,8 @@ int             Postprocess(LP, pRecord, pSolution)
       /* Added by LRS */
   FullSolution->DataMaxNorm = Solution->DataMaxNorm;
   FullSolution->OptimalSolutionMaxNorm =Solution->OptimalSolutionMaxNorm;
+    FullSolution->NumberBounds =Solution->NumberBounds;
+
    /* End of Additon*/
 
   
