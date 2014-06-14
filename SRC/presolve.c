@@ -2027,6 +2027,13 @@ int             Postprocess(LP, pRecord, pSolution)
   FullSolution->Iterations = Solution->Iterations;
   FullSolution->RestoredIteration = Solution->RestoredIteration;
 
+
+      /* Added by LRS */
+  FullSolution->DataMaxNorm = Solution->DataMaxNorm;
+  FullSolution->OptimalSolutionMaxNorm =Solution->OptimalSolutionMaxNorm;
+   /* End of Additon*/
+
+  
   FullSolution->Status = Solution->Status;
   FullSolution->IterationHistory = (IterationRecord *)
     Malloc((Solution->Iterations + 1) * sizeof(IterationRecord),

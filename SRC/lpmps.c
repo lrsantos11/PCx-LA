@@ -482,7 +482,9 @@ solution       *MPSsolution(LP, MPS, LPsolution, Changes, Inputs)
    	/* Added by LRS: copying Solution and Data Norms*/
 
 	Solution->DataMaxNorm = LPsolution->DataMaxNorm;
+	// printf("Copying DataMaxNorm = %13.8e\n", Solution->DataMaxNorm);
     Solution->OptimalSolutionMaxNorm = LPsolution->OptimalSolutionMaxNorm;
+    // printf("\nCopying OptimalSolutionMaxNorm = %13.8e\n", Solution->OptimalSolutionMaxNorm);
 	/* End of Addition  */ 
    /* Free old solution structure */
    FreeSolution(LPsolution);

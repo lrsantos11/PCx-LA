@@ -213,6 +213,7 @@ extern        char            outfile[200]; // Rafael inserted
    
    status = PCx(ReducedLP, Solution, Inputs);
  
+
    if (status != 0) 
       {
 	 printf("Error in PCx(). Exiting with code %d\n", status);
@@ -227,6 +228,8 @@ extern        char            outfile[200]; // Rafael inserted
 
    UnSplitFreeVars(ReducedLP, Solution);
    
+
+
    if (Inputs->Scaling)
       UnscaleLP(ReducedLP, Solution);
 
@@ -234,10 +237,9 @@ extern        char            outfile[200]; // Rafael inserted
       if (Postprocess(LP, &Record, &Solution) < 0) 
 	 exit(PRESOLVE_ERROR);
 
+
    /* Check the infeasibilities for the point obtained */
    ComputeAndPrintInfeasibilities(Solution, LP);
-
-   
 
    /* Express the solution of LP in terms of the original MPS formulation */
    Solution = MPSsolution(LP, MPS, Solution, Changes, Inputs);
