@@ -20,6 +20,7 @@ class PTInfo():
         self.cpu = 0
         self.normdata = 0
         self.normsol = 0
+        self.bounds = 0
 
     def add_status(self, status):
         self.status = int(status)
@@ -69,14 +70,17 @@ class PTInfo():
     def add_normsol(self, normsol):
         self.normsol = float(normsol)
 
+    def add_bounds(self, bounds):
+        self.bounds = int(bounds)
+
     def csv_header(self):
-        return ("Name,Status,Rows b.p.,Cols b.p.,Rows a.p.,Cols a.p.,Nonzeros,Density,"
+        return ("Name,Status,Rows b.p.,Cols b.p.,Rows a.p.,Cols a.p.,Bounds a.p.,Nonzeros,Density,"
                 "Relative Infeas,Relative Compl,Primal Objective,Dual Objetive,"
                 "Max Add. Corr.,Iters,CPU Time [secs],MaxNorm of Data,MaxNorm of Solution\n")
 
     def csv(self):
-        return "{},{},{},{},{},{},{},{:e},{:e},{:e},{:e},{:e},{},{},{:e},{:e},{:e}\n".format(self.name,
-                self.status, self.brows, self.bcols, self.arows, self.acols,
+        return "{},{},{},{},{},{},{},{},{:e},{:e},{:e},{:e},{:e},{},{},{:e},{:e},{:e}\n".format(self.name,
+                self.status, self.brows, self.bcols, self.arows, self.acols, self.bounds,
                 self.fact_nonzeros, self.fact_density, self.rel_infeas,
                 self.rel_compl, self.prim_obj, self.dual_obj, self.max_corr, self.it, self.cpu,
                 self.normdata, self.normsol)
@@ -235,7 +239,12 @@ def bench(S, p, o, mf, s, g, t, k):
                         if m:
                             info.add_normsol(m.group('normsol'))
                             step += 1 
-                    elif step == 1:
+                    elif step == 11:
+                        m = re.match('.*Number of Bounds = *(?P<bounds>[0-9]*)', l)
+                        if m:
+                            info.add_bounds(m.group('bounds'))
+                            step += 1         
+                    elif step == 12:
                         m = re.match('Time to solve.*: *(?P<cpu>[0-9]*.\.[0-9]*).*', l)
                         if m:
                             info.add_cpu(m.group('cpu'))
