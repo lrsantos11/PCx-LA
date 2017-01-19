@@ -378,7 +378,7 @@ PCx(LP, Solution, Inputs)
 	     // (fabs(primal_objective - dual_objective) / 
 	     // (1.0 + (fabs(primal_objective))) < OptTol)) 
 	 	 // { 
-	     mu / (1.0 + (fabs(primal_objective))) < OptTol) 
+	      mu / (1.0 + (fabs(primal_objective))) < OptTol) 
 	 {
 	       Solution->Status = OPTIMAL_SOL;
 	       if (Inputs->ReportingLevel > 0)
@@ -411,7 +411,12 @@ PCx(LP, Solution, Inputs)
 	 }
 
 	 
-	 
+	    /* Added by LRS: Add Norm of Optimal Solution */
+
+
+   IterateMaxNorm(Solution, Current);
+
+
     /* If we are much bigger than best phi so far, declare INFEASIBLE */
 
 	 if (phi > MAX(1.e5 * min_phi[Iteration], 1.0e-8)) 
@@ -705,10 +710,6 @@ PCx(LP, Solution, Inputs)
    RecomputeDualVariables(LP, Solution);
 
 
-   /* Added by LRS: Add Norm of Optimal Solution */
-
-
-   IterateMaxNorm(Solution, Current);
 
 
   /*******************************************************************/

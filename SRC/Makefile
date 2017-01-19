@@ -16,11 +16,11 @@ ifdef MEX
 #CFLAGS = -O -D$(PCx_ARCH) -DMEX -I../F2C
 CFLAGS = -g -D$(PCx_ARCH) -DMEX -I../F2C
 else
-CFLAGS = -O3  -axSSE4.2 -xSSE4.2    -D$(PCx_ARCH) -I../F2C
+CFLAGS = -O3  -axAVX -xAVX    -D$(PCx_ARCH) -I../F2C
 #CFLAGS = -g -D$(PCx_ARCH) -I../F2C
 endif
 
-LFLAGS = -O3  -axSSE4.2 -xSSE4.2 
+LFLAGS = -O3  -axAVX -xAVX 
 
 include ../MAKEARCH/$(PCx_ARCH).make
 # MISC_OBJS is defined in architecture-specific makefile
@@ -50,7 +50,7 @@ clean:
 	/bin/rm -f *.o $(PCX_LIB) ../PCx
 
 $(PCX_LIB): $(OBJS)
-	ar r $(PCX_LIB) $(OBJS)
+	xiar r $(PCX_LIB) $(OBJS)
 	$(RANLIB) $(PCX_LIB)
 
 .c.o:
