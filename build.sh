@@ -7,7 +7,7 @@ fi
 
 # first things first, need to have f2c available!
 cd F2C;
-make CC=icc;
+make CC=icc CFLAGS="-O3  -axAVX -xAVX" AR="xiar -qm64";
 cd ../ ;
 
 if test "$1" = "PCx_wssmp" ; then
@@ -45,7 +45,7 @@ else # if not PCx_wssmp
 	    if (test ! -f Ng-Peyton/cholesky.a) then
 		if (test -d Ng-Peyton) then
 		    cd Ng-Peyton;
-		    make CC=icc;
+		    make CC=icc CFLAGS="-O3  -axAVX -xAVX" AR="xiar -qm64"
 		    cd ../ ;
 		else
 		    echo No directory ./Ng-Peyton, aborting.... ; 
@@ -60,7 +60,7 @@ else # if not PCx_wssmp
 	fi
 # go ahead and make it
 	TARGETDIR=.; export TARGETDIR;
-	make CC=icc $1 ;
+	make CC=icc CFLAGS="-O3  -axAVX -xAVX" AR="xiar -qm64" $1 ;
     else
 	if test "$1" = "PCx_mysolver" ; then
 	    echo ;
