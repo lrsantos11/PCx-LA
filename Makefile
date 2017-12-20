@@ -6,7 +6,7 @@ export NG_LIB = ../Ng-Peyton/cholesky.a
 export TARGETDIR = .
 
 export CC ?= icc
-export CFLAGS ?= -g -O2
+export CFLAGS ?= -O3  -axAVX -xAVX
 export FC ?= @FC@
 export FCFLAGS ?= @FCFLAGS@
 

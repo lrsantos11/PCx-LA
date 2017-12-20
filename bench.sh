@@ -36,26 +36,26 @@ do
     esac
 done
 
-if $(test ! -v lib)
-then
-    lib=$stdlib
-elif $(test -z $lib)
-then
-    lib=$stdlib
-fi
+# if $(test ! -v lib)
+# then
+#     lib=$stdlib
+# elif $(test -z $lib)
+# then
+#     lib=$stdlib
+# fi
 
-if $(test ! -v specs)
-then
-    specs=$stdspecs
-elif $(test -z $specs)
-then
-    specs=$stdspecs
-fi
+# if $(test ! -v specs)
+# then
+#     specs=$stdspecs
+# elif $(test -z $specs)
+# then
+#     specs=$stdspecs
+# fi
 
 for l in $lib
 do
     for s in $specs
     do
-        python3 bench.py -K -o bench-$l-$s.out -S $s.specs -c --$l
+        python3 bench.py -K -c -o bench-$l-$s.out   --$l
     done
 done

@@ -3,10 +3,10 @@ stdlib="netlib netlibqap kenlib meslib pdslib raillib fctplib"
 while getopts h name
 do
     case $name in
-        h)
+        (h)
             echo "Give some statistics about some library based on."
-            echo "the output of filter.sh.";&
-        ?)
+            echo "the output of filter.sh.";
+        (?)
             echo 'Usage: analysis.sh lib ...'
             echo ''
             echo 'Avaliable test library:'

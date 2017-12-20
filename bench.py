@@ -128,19 +128,19 @@ def bench(S, p, o, mf, s, g, t, k):
             except ValueError:
                 pass
     elif g[0] == 3:
-        fl = fnmatch.filter(fl, 'netlib-*')
+        fl = fnmatch.filter(fl, 'netlib-*.mps')
     elif g[0] == 4:
-        fl = fnmatch.filter(fl, 'netlibqap-*')
+        fl = fnmatch.filter(fl, 'netlibqap-*.mps')
     elif g[0] == 5:
-        fl = fnmatch.filter(fl, 'kennington-*')
+        fl = fnmatch.filter(fl, 'kennington-*.mps')
     elif g[0] == 6:
-        fl = fnmatch.filter(fl, 'meszaros-*')
+        fl = fnmatch.filter(fl, 'meszaros-*.mps')
     elif g[0] == 7:
-        fl = fnmatch.filter(fl, 'pds-*')
+        fl = fnmatch.filter(fl, 'pds-*.mps')
     elif g[0] == 8:
-        fl = fnmatch.filter(fl, 'rail-*')
+        fl = fnmatch.filter(fl, 'rail-*.mps')
     elif g[0] == 9:
-        fl = fnmatch.filter(fl, 'fctp-*')
+        fl = fnmatch.filter(fl, 'fctp-*.mps')
 
     # Sort the list of files to be used in the benchmark.
     if s == 1:

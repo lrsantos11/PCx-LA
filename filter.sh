@@ -36,21 +36,21 @@ do
     esac
 done
 
-if $(test ! -v lib)
-then
-    lib=$stdlib
-elif $(test -z $lib)
-then
-    lib=$stdlib
-fi
+# if $(test ! -v lib)
+# then
+#     lib=$stdlib
+# elif $(test -z $lib)
+# then
+#     lib=$stdlib
+# fi
 
-if $(test ! -v specs)
-then
-    specs=$stdspecs
-elif $(test -z $specs)
-then
-    specs=$stdspecs
-fi
+# if $(test ! -v specs)
+# then
+#     specs=$stdspecs
+# elif $(test -z $specs)
+# then
+#     specs=$stdspecs
+# fi
 
 function specs_join(){
     echo ","$(for s in ${specs};do printf "%s,,,," $s; done;) > bench-${1}.join
